@@ -22,19 +22,22 @@ info "Configure timezone"
 timedatectl set-timezone ${timezone} --no-ask-password
 
 info "Prepare root password for MySQL"
-debconf-set-selections <<< "mariadb-server-10.0 mysql-server/root_password password \"''\""
-debconf-set-selections <<< "mariadb-server-10.0 mysql-server/root_password_again password \"''\""
+debconf-set-selections <<< "mysql-community-server mysql-community-server/root-pass password \"''\""
+debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password \"''\""
 echo "Done!"
+
+info "Add PHP 7.3 repository"
+add-apt-repository ppa:ondrej/php
 
 info "Update OS software"
 apt-get update
 apt-get upgrade -y
 
 info "Install additional software"
-apt-get install -y php7.0-curl php7.0-cli php7.0-intl php7.0-mysqlnd php7.0-gd php7.0-fpm php7.0-mbstring php7.0-xml unzip nginx mariadb-server-10.0 php.xdebug
+apt-get install -y php7.3-curl php7.3-cli php7.3-intl php7.3-mysqlnd php7.3-gd php7.3-fpm php7.3-mbstring php7.3-xml unzip nginx mysql-server-5.7 php.xdebug php-memcached memcached
 
 info "Configure MySQL"
-sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
+sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
 mysql -uroot <<< "CREATE USER 'root'@'%' IDENTIFIED BY ''"
 mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'"
 mysql -uroot <<< "DROP USER 'root'@'localhost'"
@@ -42,10 +45,10 @@ mysql -uroot <<< "FLUSH PRIVILEGES"
 echo "Done!"
 
 info "Configure PHP-FPM"
-sed -i 's/user = www-data/user = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/group = www-data/group = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/owner = www-data/owner = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
-cat << EOF > /etc/php/7.0/mods-available/xdebug.ini
+sed -i 's/user = www-data/user = vagrant/g' /etc/php/7.3/fpm/pool.d/www.conf
+sed -i 's/group = www-data/group = vagrant/g' /etc/php/7.3/fpm/pool.d/www.conf
+sed -i 's/owner = www-data/owner = vagrant/g' /etc/php/7.3/fpm/pool.d/www.conf
+cat << EOF > /etc/php/7.3/mods-available/xdebug.ini
 zend_extension=xdebug.so
 xdebug.remote_enable=1
 xdebug.remote_connect_back=1
@@ -67,8 +70,8 @@ rm /etc/nginx/sites-enabled/default
 echo "Done!"
 
 info "Initailize databases for MySQL"
-mysql -uroot <<< "CREATE DATABASE yii2basic"
-mysql -uroot <<< "CREATE DATABASE yii2basic_test"
+mysql -uroot <<< "CREATE DATABASE task_manager"
+mysql -uroot <<< "CREATE DATABASE task_manager_test"
 echo "Done!"
 
 info "Install composer"
