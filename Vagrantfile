@@ -7,7 +7,7 @@ required_plugins.each do |plugin|
 end
 
 domains = {
-  app: 'yii2basic.test'
+  app: 'yii.task'
 }
 
 vagrantfile_dir_path = File.dirname(__FILE__)
@@ -31,7 +31,7 @@ end
 # vagrant configurate
 Vagrant.configure(2) do |config|
   # select the box
-  config.vm.box = 'bento/ubuntu-16.04'
+  config.vm.box = 'bento/ubuntu-18.04'
 
   # should we ask about box updates?
   config.vm.box_check_update = options['box_check_update']
