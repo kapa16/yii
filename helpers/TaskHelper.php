@@ -1,29 +1,21 @@
 <?php
 
-
 namespace app\helpers;
 
-
 use app\entities\task\Status;
-use app\entities\task\Type;
+use app\entities\User;
+use yii\helpers\ArrayHelper;
 
 class TaskHelper
 {
+
     public static function statusList(): array
     {
-        return [
-            Status::NEW => 'New',
-            Status::WORK => 'Work',
-            Status::CANCELLED => 'Cancelled',
-            Status::COMPLETED => 'Completed',
-        ];
+        return ArrayHelper::map(Status::find()->asArray()->all(), 'id', 'name');
     }
-    public static function typesList(): array
+
+    public static function responsibleList(): array
     {
-        return [
-            Type::NEW_FEATURE => 'New feature',
-            Type::FIX_BUG => 'Fix bug',
-            Type::ERROR => 'Error',
-        ];
+        return ArrayHelper::map(User::find()->orderBy('name')->asArray()->all(), 'id', 'name');
     }
 }

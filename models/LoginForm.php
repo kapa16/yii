@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\entities\User;
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
 
 /**
@@ -41,6 +43,7 @@ class LoginForm extends Model
      *
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
+     * @throws Exception
      */
     public function validatePassword($attribute, $params)
     {

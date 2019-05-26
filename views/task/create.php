@@ -1,8 +1,12 @@
 <?php
 
-use app\helpers\TaskHelper;
+use app\forms\task\TaskCreateForm;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\jui\DatePicker;
+
+/* @var $model TaskCreateForm */
+
 
 $this->title = 'New task';
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
@@ -17,23 +21,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'id' => 'task-create-form',
             'options' => ['class' => 'form-horizontal'],
         ]); ?>
-        <?= $form->field($model, 'title') ?>
+        <?= $form->field($model, 'name') ?>
 
         <div class="row">
-            <div class="col-md-4">
-                <?= $form->field($model, 'type')->dropDownList(TaskHelper::typesList()) ?>
+            <div class="col-md-5">
+                <?= $form->field($model, 'status')->dropDownList($model->statusList()) ?>
             </div>
-            <div class="mb-1 col-md-4">
-
-                <?= $form->field($model, 'status')->dropDownList(TaskHelper::statusList()) ?>
-            </div>
-            <div class="col-md-4">
-                <?= $form->field($model, 'priority')
-                    ->textInput(['type' => 'number', 'max' => 10, 'value' => 1]) ?>
+            <div class="col-md-offset-2 col-md-5">
+                <?= $form->field($model, 'deadline')
+                    ->widget(DatePicker::class, [
+                            'options' => ['class' => 'form-control'],
+//                            'dateFormat' => 'yyyy.MM.dd'
+                    ]) ?>
             </div>
         </div>
 
-        <?= $form->field($model, 'implementer')->textInput() ?>
+        <?= $form->field($model, 'responsible')->dropDownList($model->responsibleList()) ?>
         <?= $form->field($model, 'description')->textarea() ?>
         <?= Html::submitButton('Create', ['class' => 'btn btn-primary']) ?>
         <?php ActiveForm::end() ?>
