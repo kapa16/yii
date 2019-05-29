@@ -2,8 +2,7 @@
 
 namespace app\entities\task;
 
-use app\entities\User;
-use DateTime;
+use app\entities\Users;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -20,8 +19,8 @@ use yii\db\ActiveRecord;
  * @property string $created_at
  * @property string $updated_at
  *
- * @property User $creator
- * @property User $responsible
+ * @property Users $creator
+ * @property Users $responsible
  * @property Status $status
  */
 class Task extends ActiveRecord
@@ -59,8 +58,8 @@ class Task extends ActiveRecord
             [['status_id', 'creator_id', 'responsible_id'], 'integer'],
             [['deadline', 'created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 100],
-            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['creator_id' => 'id']],
-            [['responsible_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['responsible_id' => 'id']],
+            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['creator_id' => 'id']],
+            [['responsible_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['responsible_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
         ];
     }
@@ -85,7 +84,7 @@ class Task extends ActiveRecord
      */
     public function getCreator(): ActiveQuery
     {
-        return $this->hasOne(User::class, ['id' => 'creator_id']);
+        return $this->hasOne(Users::class, ['id' => 'creator_id']);
     }
 
     /**
@@ -93,7 +92,7 @@ class Task extends ActiveRecord
      */
     public function getResponsible(): ActiveQuery
     {
-        return $this->hasOne(User::class, ['id' => 'responsible_id']);
+        return $this->hasOne(Users::class, ['id' => 'responsible_id']);
     }
 
     /**

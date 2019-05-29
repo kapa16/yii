@@ -45,8 +45,6 @@ class TaskController extends Controller
     {
         $form = new TaskCreateForm();
         $form->load(Yii::$app->request->post());
-//        var_dump(Yii::$app->formatter->asDate($form->deadline));
-//        die;
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {

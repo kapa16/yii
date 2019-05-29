@@ -14,7 +14,7 @@ class m190525_104901_create_users_table extends Migration
     {
         $this->createTable('{{%users}}', [
             'id' => $this->primaryKey(),
-            'username' => $this->string(100)->notNull()->unique(),
+            'login' => $this->string(100)->notNull()->unique(),
             'password' => $this->string(),
             'name' => $this->string(),
             'last_name' => $this->string(),
@@ -24,7 +24,7 @@ class m190525_104901_create_users_table extends Migration
             'updated_at' => $this->datetime(),
         ]);
 
-        $this->createIndex('username_idx', '{{%users}}', 'username');
+        $this->createIndex('login_idx', '{{%users}}', 'login');
     }
 
     /**

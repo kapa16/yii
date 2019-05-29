@@ -2,13 +2,13 @@
 
 namespace app\repositories;
 
-use app\entities\User;
+use app\entities\Users;
 
 class UserRepository
 {
-    public function get($id): User
+    public function get($id): Users
     {
-        if (!$user = User::findOne($id)) {
+        if (!$user = Users::findOne($id)) {
             throw new NotFoundException('User not found');
         }
         return $user;

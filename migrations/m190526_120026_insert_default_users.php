@@ -15,14 +15,14 @@ class m190526_120026_insert_default_users extends Migration
     public function safeUp()
     {
         $this->insert('{{%users}}', [
-            'username' => 'admin',
+            'login' => 'admin',
             'password' => Yii::$app->getSecurity()->generatePasswordHash('admin'),
             'name' => 'admin',
             'last_name' => 'admin',
             'email' => 'admin@admin.ru',
         ]);
         $this->insert('{{%users}}', [
-            'username' => 'demo',
+            'login' => 'demo',
             'password' => Yii::$app->getSecurity()->generatePasswordHash('demo'),
             'name' => 'demo',
             'last_name' => 'demo',
@@ -35,7 +35,8 @@ class m190526_120026_insert_default_users extends Migration
      */
     public function safeDown()
     {
-        $this->delete('{{%users}}', ['username' => 'admin']);
+        $this->delete('{{%users}}', ['login' => 'admin']);
+        $this->delete('{{%users}}', ['login' => 'demo']);
     }
 
     /*
