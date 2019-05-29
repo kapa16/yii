@@ -1,10 +1,6 @@
 <?php
 
-
 namespace app\entities\task;
-
-
-use ReflectionClass;
 
 class Type
 {

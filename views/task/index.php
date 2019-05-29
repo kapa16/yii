@@ -1,15 +1,16 @@
 <?php
 
+use app\forms\task\TaskSearchForm;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $taskForm app\forms\TaskCreateForm */
+/* @var $searchModel TaskSearchForm */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 
 
-$this->title = 'Task list';
+$this->title = 'Tasks';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
@@ -18,25 +19,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Create Task', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Fake data', ['fake'], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <div class="box">
         <div class="box-body">
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                'filterModel' => $taskForm,
+                'filterModel' => $searchModel,
                 'columns' => [
                     'id',
                     [
-                        'attribute' => 'title',
+                        'attribute' => 'name',
                         'value' => function ($model) {
-                            return Html::a(Html::encode($model['title']), ['view', 'id' => $model['id']]);
+                            return Html::a(Html::encode($model->name), ['view', 'id' => $model->id]);
                         },
                         'format' => 'raw',
                     ],
-                    'type',
-                    'status',
-                    'priority',
+                    [
+                        'attribute' => 'status',
+                        'value' => function ($model) {
+                            return Html::encode($model->status->name);
+                        },
+                        'filter' => $searchModel->statusList(),
+                        'format' => 'raw',
+                    ],
+                    'responsible_id',
+                    'deadline',
                     ['class' => ActionColumn::class],
                 ],
             ]) ?>
