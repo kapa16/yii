@@ -3,7 +3,7 @@
 namespace app\helpers;
 
 use app\entities\task\Status;
-use app\models\UserIdentity;
+use app\entities\Users;
 use yii\helpers\ArrayHelper;
 
 class TaskHelper

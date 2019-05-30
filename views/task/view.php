@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-index">
 
     <p>
-        <?= Html::a('Edit', ['edit', 'id' => $task['id']], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Edit', ['update', 'id' => $task['id']], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $task['id']], ['class' => 'btn btn-danger']) ?>
     </p>
 

@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\entities\task\Task;
-use app\forms\task\TaskCreateForm;
+use app\forms\task\TaskForm;
 use app\forms\task\TaskSearchForm;
 use app\services\TaskService;
 use Faker\Factory;
@@ -43,8 +43,7 @@ class TaskController extends Controller
 
     public function actionCreate()
     {
-        $form = new TaskCreateForm();
-        $form->load(Yii::$app->request->post());
+        $form = new TaskForm();
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
@@ -57,6 +56,27 @@ class TaskController extends Controller
         }
 
         return $this->render('create', [
+            'model' => $form,
+        ]);
+    }
+
+    public function actionUpdate($id)
+    {
+        $task = $this->findModel($id);
+        $form = new TaskForm();
+        $form->loadData($task);
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->service->edit($task->id, $form);
+                return $this->redirect(['view', 'id' => $task->id]);
+            } catch (\DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
+        }
+
+        return $this->render('update', [
             'model' => $form,
         ]);
     }
@@ -77,7 +97,14 @@ class TaskController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function findModel($id)
+    /**
+     * Finds the Task model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Task the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function findModel($id): Task
     {
         if (($model = Task::findOne($id)) !== null) {
             return $model;

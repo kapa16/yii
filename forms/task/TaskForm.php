@@ -2,10 +2,11 @@
 
 namespace app\forms\task;
 
+use app\entities\task\Task;
 use app\helpers\TaskHelper;
 use yii\base\Model;
 
-class TaskCreateForm extends Model
+class TaskForm extends Model
 {
     public $id;
     public $name;
@@ -13,6 +14,23 @@ class TaskCreateForm extends Model
     public $deadline;
     public $description;
     public $responsible;
+    public $creator;
+    public $created_at;
+    public $updated_at;
+
+
+    public function loadData(Task $model): void
+    {
+        $this->id = $model->id;
+        $this->name = $model->name;
+        $this->status = $model->status;
+        $this->deadline = $model->deadline;
+        $this->description = $model->description;
+        $this->responsible = $model->responsible;
+        $this->creator = $model->creator;
+        $this->created_at = $model->created_at;
+        $this->updated_at = $model->updated_at;
+    }
 
     public function rules(): array
     {
@@ -21,6 +39,7 @@ class TaskCreateForm extends Model
             [['responsible', 'status'], 'integer'],
             ['description', 'string'],
             ['deadline', 'date'],
+            [['creator', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
