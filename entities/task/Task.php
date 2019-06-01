@@ -45,38 +45,19 @@ class Task extends ActiveRecord
         return $task;
     }
 
+    public function edit($name, $description, $status_id, $responsible_id, $deadline): void
+    {
+        $this->name = $name;
+        $this->description = $description;
+        $this->status_id = $status_id;
+        $this->responsible_id = $responsible_id;
+        $this->deadline = $deadline;
+        $this->updated_at = date('Y.m.d H:i:s');
+    }
+
     public static function tableName()
     {
         return 'tasks';
-    }
-
-    public function rules()
-    {
-        return [
-            [['name'], 'required'],
-            [['description'], 'string'],
-            [['status_id', 'creator_id', 'responsible_id'], 'integer'],
-            [['deadline', 'created_at', 'updated_at'], 'safe'],
-            [['name'], 'string', 'max' => 100],
-            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['creator_id' => 'id']],
-            [['responsible_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['responsible_id' => 'id']],
-            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'description' => 'Description',
-            'status_id' => 'Status ID',
-            'creator_id' => 'Creator ID',
-            'responsible_id' => 'Responsible ID',
-            'deadline' => 'Deadline',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
     }
 
     /**
