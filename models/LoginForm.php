@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use app\models\UserIdentity;
 use Yii;
 use yii\base\Exception;
 use yii\base\Model;

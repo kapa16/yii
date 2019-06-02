@@ -34,6 +34,9 @@ class TaskSearchForm extends Model
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 21,
+            ],
             'sort' => [
                 'defaultOrder' => ['id' => SORT_DESC]
             ]

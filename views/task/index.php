@@ -23,32 +23,21 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <div class="box">
-        <div class="box-body">
+        <div class="box-body clearfix">
             <?= ListView::widget([
                 'dataProvider' => $dataProvider,
                 'itemView' => '_card',
-//                'itemView' => \app\widgets\TaskCard::widget(),
-//                'columns' => [
-//                    'id',
-//                    [
-//                        'attribute' => 'name',
-//                        'value' => function ($model) {
-//                            return Html::a(Html::encode($model->name), ['view', 'id' => $model->id]);
-//                        },
-//                        'format' => 'raw',
-//                    ],
-//                    [
-//                        'attribute' => 'status',
-//                        'value' => function ($model) {
-//                            return Html::encode($model->status->name);
-//                        },
-//                        'filter' => $searchModel->statusList(),
-//                        'format' => 'raw',
-//                    ],
-//                    'responsible_id',
-//                    'deadline',
-//                    ['class' => ActionColumn::class],
-//                ],
+                'layout' => '{items}',
+            ]) ?>
+        </div>
+
+        <div class="box-body">
+
+            <?= ListView::widget([
+                'dataProvider' => $dataProvider,
+                'itemView' => '_card',
+                'layout' => '{pager}',
+                'options' => ['class' => 'center-block']
             ]) ?>
         </div>
     </div>
