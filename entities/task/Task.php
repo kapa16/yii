@@ -3,8 +3,10 @@
 namespace app\entities\task;
 
 use app\entities\Users;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "tasks".
@@ -30,8 +32,7 @@ class Task extends ActiveRecord
         $description,
         $status_id,
         $creator_id,
-        $responsible_id,
-        $deadline
+        $responsible_id
     ): self
     {
         $task = new static();
@@ -40,7 +41,7 @@ class Task extends ActiveRecord
         $task->status_id = $status_id;
         $task->creator_id = $creator_id;
         $task->responsible_id = $responsible_id;
-        $task->deadline = $deadline;
+//        $task->deadline = $deadline;
         $task->created_at = date('Y.m.d H:i:s');
         return $task;
     }
@@ -55,9 +56,19 @@ class Task extends ActiveRecord
         $this->updated_at = date('Y.m.d H:i:s');
     }
 
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'tasks';
+    }
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**

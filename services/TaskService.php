@@ -39,7 +39,6 @@ class TaskService
             $status->id,
             $creator->id,
             $responsible->id,
-            date('Y.m.d',strtotime($form->deadline))
         );
         $this->tasks->save($task);
         return $task;
