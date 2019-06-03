@@ -3,6 +3,7 @@
 namespace app\entities\task;
 
 use app\entities\Users;
+use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -31,18 +32,16 @@ class Task extends ActiveRecord
         $name,
         $description,
         $status_id,
-        $creator_id,
-        $responsible_id
+        $responsible_id,
+        $deadline
     ): self
     {
         $task = new static();
         $task->name = $name;
         $task->description = $description;
         $task->status_id = $status_id;
-        $task->creator_id = $creator_id;
         $task->responsible_id = $responsible_id;
-//        $task->deadline = $deadline;
-        $task->created_at = date('Y.m.d H:i:s');
+        $task->deadline = $deadline;
         return $task;
     }
 
@@ -53,7 +52,6 @@ class Task extends ActiveRecord
         $this->status_id = $status_id;
         $this->responsible_id = $responsible_id;
         $this->deadline = $deadline;
-        $this->updated_at = date('Y.m.d H:i:s');
     }
 
     public static function tableName(): string
@@ -67,6 +65,11 @@ class Task extends ActiveRecord
             [
                 'class' => TimestampBehavior::class,
                 'value' => new Expression('NOW()'),
+            ],
+            [
+                'class' => BlameableBehavior::class,
+                'createdByAttribute' => 'creator_id',
+                'updatedByAttribute' => null,
             ],
         ];
     }
