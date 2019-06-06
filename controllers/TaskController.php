@@ -83,17 +83,7 @@ class TaskController extends Controller
 
     public function actionFake(): \yii\web\Response
     {
-        $faker = Factory::create();
-        for ($i = 1; $i <= 50; $i++) {
-            $task = new Task();
-            $task->name = $faker->text(15);
-            $task->description = $faker->text();
-            $task->status_id = $faker->numberBetween(1, 7);
-            $task->creator_id = $faker->numberBetween(1, 2);
-            $task->responsible_id = $faker->numberBetween(1, 2);
-            $task->deadline = date('Y-m-d H:i:s');
-            $task->save();
-        }
+        $this->service->createFakeData();
         return $this->redirect(['index']);
     }
 
