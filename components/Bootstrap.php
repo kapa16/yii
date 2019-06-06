@@ -2,7 +2,7 @@
 
 namespace app\components;
 
-use app\entities\task\Task;
+use app\entities\task\Tasks;
 use app\services\TaskSubscribeService;
 use yii\base\BootstrapInterface;
 use yii\base\Event;
@@ -25,8 +25,8 @@ class Bootstrap implements BootstrapInterface
         ]);
 
         Event::on(
-            Task::class,
-            Task::EVENT_AFTER_INSERT,
+            Tasks::class,
+            Tasks::EVENT_AFTER_INSERT,
             [$container->get(TaskSubscribeService::class), 'SendNotificationHandler']
         );
     }

@@ -2,9 +2,11 @@
 
 namespace app\forms\task;
 
-use app\entities\task\Task;
+use app\entities\task\Tasks;
 use app\helpers\TaskHelper;
+use DateTime;
 use yii\base\Model;
+use yii\caching\DbDependency;
 use yii\data\ActiveDataProvider;
 
 class TaskSearchForm extends Model
@@ -14,12 +16,13 @@ class TaskSearchForm extends Model
     public $status;
     public $responsible;
     public $deadline;
+    public $month;
 
     public function rules(): array
     {
         return [
             [['id', 'status'], 'integer'],
-            [['name', 'responsible'], 'safe'],
+            [['name', 'responsible', 'month'], 'safe'],
             [['deadline'], 'datetime'],
         ];
     }
@@ -27,10 +30,12 @@ class TaskSearchForm extends Model
     /**
      * @param array $params
      * @return ActiveDataProvider
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = Task::find();
+        $query = Tasks::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -54,8 +59,15 @@ class TaskSearchForm extends Model
             'status_id' => $this->status,
         ]);
 
-        $query
-            ->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
+
+        if ($this->month) {
+            $date = new DateTime(date('Y') . '-' . $this->month . '-01');
+            $query->andFilterWhere(['>=', 'deadline', $date->format('Y-m-d H:i:s')]);
+
+            $date->modify('last day of this month')->setTime(23, 59, 59);
+            $query->andFilterWhere(['<=', 'deadline', $date->format('Y-m-d H:i:s')]);
+        }
 
         return $dataProvider;
     }
@@ -63,5 +75,10 @@ class TaskSearchForm extends Model
     public function statusList(): array
     {
         return TaskHelper::statusList();
+    }
+
+    public function monthsList(): array
+    {
+        return TaskHelper::monthsList();
     }
 }

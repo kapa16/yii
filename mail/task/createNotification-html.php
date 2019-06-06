@@ -1,13 +1,13 @@
 <?php
 
-use app\entities\task\Task;
+use app\entities\task\Tasks;
 use app\entities\Users;
 use yii\helpers\Html;
 use yii\web\View;
 
 /* @var $this View */
 /* @var $user Users */
-/* @var $task Task */
+/* @var $task Tasks */
 
 $taskLink = Yii::$app->urlManager->createAbsoluteUrl(['task/view', 'id' => $task->id]);
 ?>

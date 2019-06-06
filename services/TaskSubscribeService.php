@@ -2,7 +2,7 @@
 
 namespace app\services;
 
-use app\entities\task\Task;
+use app\entities\task\Tasks;
 use app\entities\Users;
 use yii\mail\MailerInterface;
 
@@ -20,9 +20,9 @@ class TaskSubscribeService
 
     public function SendNotificationHandler($event): void
     {
-        /** @var Task $eventSender */
+        /** @var Tasks $eventSender */
         $this->task = $event->sender;
-        if (!is_a($this->task, Task::class)) {
+        if (!is_a($this->task, Tasks::class)) {
             throw new \UnexpectedValueException ('Invalid event sender type');
         }
 

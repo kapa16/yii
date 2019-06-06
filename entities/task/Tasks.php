@@ -26,7 +26,7 @@ use yii\db\Expression;
  * @property Users $responsible
  * @property Status $status
  */
-class Task extends ActiveRecord
+class Tasks extends ActiveRecord
 {
     public static function create(
         $name,
