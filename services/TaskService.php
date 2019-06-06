@@ -27,9 +27,8 @@ class TaskService
         $this->users = $users;
     }
 
-    public function create($creatorId, TaskForm $form): Task
+    public function create(TaskForm $form): Task
     {
-        $creator = $this->users->get($creatorId);
         $responsible = $this->users->get($form->responsible);
         $status = $this->statuses->get($form->status);
 
@@ -37,7 +36,6 @@ class TaskService
             $form->name,
             $form->description,
             $status->id,
-            $creator->id,
             $responsible->id,
             date('Y.m.d',strtotime($form->deadline))
         );

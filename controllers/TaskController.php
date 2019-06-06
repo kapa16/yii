@@ -47,7 +47,7 @@ class TaskController extends Controller
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                $task = $this->service->create(Yii::$app->user->id, $form);
+                $task = $this->service->create($form);
                 return $this->redirect(['view', 'id' => $task->id]);
             } catch (\DomainException $e) {
                 Yii::$app->errorHandler->logException($e);

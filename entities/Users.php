@@ -2,7 +2,9 @@
 
 namespace app\entities;
 
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "users".
@@ -21,7 +23,7 @@ class Users extends ActiveRecord
 {
     public const SCENARIO_AUTH = 'auth';
 
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'users';
     }
@@ -37,7 +39,7 @@ class Users extends ActiveRecord
         ];
     }
 
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -62,4 +64,15 @@ class Users extends ActiveRecord
         }
         return parent::fields();
     }
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
 }
