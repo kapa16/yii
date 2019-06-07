@@ -77,7 +77,7 @@ class TaskService
         }
     }
 
-    public function cacheDataProvider($dataProvider)
+    public function cacheDataProvider($dataProvider): void
     {
         $dependency = new DbDependency;
         $dependency->sql = <<<sql

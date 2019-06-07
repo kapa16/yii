@@ -17,12 +17,14 @@ class TaskSearchForm extends Model
     public $responsible;
     public $deadline;
     public $month;
+    public $year;
+    public $filterBy = 'created_at';
 
     public function rules(): array
     {
         return [
             [['id', 'status'], 'integer'],
-            [['name', 'responsible', 'month'], 'safe'],
+            [['name', 'responsible', 'month', 'year', 'filterBy'], 'safe'],
             [['deadline'], 'datetime'],
         ];
     }
@@ -61,12 +63,12 @@ class TaskSearchForm extends Model
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 
-        if ($this->month) {
-            $date = new DateTime(date('Y') . '-' . $this->month . '-01');
-            $query->andFilterWhere(['>=', 'deadline', $date->format('Y-m-d H:i:s')]);
+        if ($this->month && $this->year) {
+            $date = new DateTime($this->year . '-' . $this->month . '-01');
+            $query->andFilterWhere(['>=', $this->filterBy, $date->format('Y-m-d H:i:s')]);
 
             $date->modify('last day of this month')->setTime(23, 59, 59);
-            $query->andFilterWhere(['<=', 'deadline', $date->format('Y-m-d H:i:s')]);
+            $query->andFilterWhere(['<=', $this->filterBy, $date->format('Y-m-d H:i:s')]);
         }
 
         return $dataProvider;
@@ -81,4 +83,19 @@ class TaskSearchForm extends Model
     {
         return TaskHelper::monthsList();
     }
+
+    public function yearsList(): array
+    {
+        return TaskHelper::yearsList();
+    }
+
+    public function dateFieldsList(): array
+    {
+        return [
+            'created_at' => 'created',
+            'updated_at' => 'updated',
+            'deadline' => 'deadline',
+        ];
+    }
+
 }

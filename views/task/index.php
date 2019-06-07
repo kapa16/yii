@@ -25,7 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-inline',
                 ],
             ]) ?>
-            <?= $form->field($searchModel, 'month', ['template' => "{label}\n{input}"])->dropDownList($searchModel->monthsList()) ?>
+            <?= $form->field($searchModel, 'filterBy', ['template' => "{label}\n{input}"])
+                ->dropDownList($searchModel->dateFieldsList())->label('Filter by date') ?>
+
+            <?= $form->field($searchModel, 'month', ['template' => '{input}'])
+                ->dropDownList($searchModel->monthsList()) ?>
+
+            <?= $form->field($searchModel, 'year', ['template' => '{input}'])
+                ->dropDownList($searchModel->yearsList(), ['options' => ['selected' => 2019]]) ?>
 
             <?= Html::submitButton('Find', ['class' => 'btn btn-primary form-control']) ?>
             <?php ActiveForm::end() ?>

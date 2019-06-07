@@ -3,6 +3,7 @@
 namespace app\helpers;
 
 use app\entities\task\Status;
+use app\entities\task\Tasks;
 use app\entities\Users;
 use DateInterval;
 use DateTime;
@@ -35,5 +36,18 @@ class TaskHelper
             $date->add($intervalMonth);
         }
         return $months;
+    }
+
+    public static function yearsList(): array
+    {
+        /** @var Tasks $firstTask */
+        $firstTask = Tasks::find()->orderBy('created_at')->limit(1)->one();
+        $firstYear = (int) (new \DateTime($firstTask->created_at))->format('Y');
+        $lastYear = date('Y') + 10;
+        $years = [''];
+        for ($i = $firstYear; $i < $lastYear; $i++) {
+            $years[$i] = $i;
+        }
+        return $years;
     }
 }
