@@ -2,24 +2,31 @@
 
 namespace app\controllers;
 
-use app\entities\task\Tasks;
 use app\forms\task\TaskForm;
 use app\forms\task\TaskSearchForm;
+use app\repositories\TaskRepository;
 use app\services\TaskService;
-use Faker\Factory;
 use Yii;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\web\Request;
+use yii\web\Response;
 
 class TaskController extends Controller
 {
     private $service;
     private $request;
+    private $tasks;
 
-    public function __construct($id, $module, TaskService $service, Request $request, $config = [])
+    public function __construct(
+        $id,
+        $module,
+        TaskRepository $tasks,
+        TaskService $service,
+        Request $request,
+        $config = [])
     {
         parent::__construct($id, $module, $config);
+        $this->tasks = $tasks;
         $this->service = $service;
         $this->request = $request;
     }
@@ -38,7 +45,7 @@ class TaskController extends Controller
 
     public function actionView($id): string
     {
-        $task = $this->findModel($id);
+        $task = $this->tasks->get($id);
 
         return $this->render('view', [
             'task' => $task,
@@ -66,7 +73,7 @@ class TaskController extends Controller
 
     public function actionUpdate($id)
     {
-        $task = $this->findModel($id);
+        $task = $this->tasks->get($id);
         $form = new TaskForm();
         $form->loadData($task);
 
@@ -85,31 +92,17 @@ class TaskController extends Controller
         ]);
     }
 
-    public function actionDelete($id): \yii\web\Response
+    public function actionDelete($id): Response
     {
-        $task = $this->findModel($id);
+        $task = $this->tasks->get($id);
         $task->delete();
         return $this->redirect(['index']);
     }
 
-    public function actionFake(): \yii\web\Response
+    public function actionFake(): Response
     {
         $this->service->createFakeData();
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Task model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Tasks the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function findModel($id): Tasks
-    {
-        if (($model = Tasks::findOne($id)) !== null) {
-            return $model;
-        }
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
 }
