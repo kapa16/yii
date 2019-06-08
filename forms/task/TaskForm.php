@@ -2,7 +2,7 @@
 
 namespace app\forms\task;
 
-use app\entities\task\Task;
+use app\entities\task\Tasks;
 use app\helpers\TaskHelper;
 use yii\base\Model;
 
@@ -19,7 +19,7 @@ class TaskForm extends Model
     public $updated_at;
 
 
-    public function loadData(Task $model): void
+    public function loadData(Tasks $model): void
     {
         $this->id = $model->id;
         $this->name = $model->name;

@@ -3,8 +3,11 @@
 namespace app\entities\task;
 
 use app\entities\Users;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "tasks".
@@ -23,13 +26,12 @@ use yii\db\ActiveRecord;
  * @property Users $responsible
  * @property Status $status
  */
-class Task extends ActiveRecord
+class Tasks extends ActiveRecord
 {
     public static function create(
         $name,
         $description,
         $status_id,
-        $creator_id,
         $responsible_id,
         $deadline
     ): self
@@ -38,10 +40,8 @@ class Task extends ActiveRecord
         $task->name = $name;
         $task->description = $description;
         $task->status_id = $status_id;
-        $task->creator_id = $creator_id;
         $task->responsible_id = $responsible_id;
         $task->deadline = $deadline;
-        $task->created_at = date('Y.m.d H:i:s');
         return $task;
     }
 
@@ -52,12 +52,26 @@ class Task extends ActiveRecord
         $this->status_id = $status_id;
         $this->responsible_id = $responsible_id;
         $this->deadline = $deadline;
-        $this->updated_at = date('Y.m.d H:i:s');
     }
 
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'tasks';
+    }
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'value' => new Expression('NOW()'),
+            ],
+            [
+                'class' => BlameableBehavior::class,
+                'createdByAttribute' => 'creator_id',
+                'updatedByAttribute' => null,
+            ],
+        ];
     }
 
     /**

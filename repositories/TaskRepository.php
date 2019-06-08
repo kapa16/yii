@@ -2,22 +2,35 @@
 
 namespace app\repositories;
 
-use app\entities\task\Task;
+use app\entities\task\Tasks;
 
 class TaskRepository
 {
-    public function get($id): Task
+    private $tasks;
+
+    public function __construct(Tasks $tasks)
     {
-        if (!$task = Task::findOne($id)) {
+        $this->tasks = $tasks;
+    }
+
+
+    public function get($id): Tasks
+    {
+        if (!$task = $this->tasks::findOne($id)) {
             throw new NotFoundException('Task not found');
         }
         return $task;
     }
 
-    public function save(Task $product): void
+    public function save(Tasks $product): void
     {
         if (!$product->save()) {
             throw new \RuntimeException('Saving error.');
         }
+    }
+
+    public function tableName()
+    {
+        return $this->tasks::tableName();
     }
 }

@@ -2,29 +2,40 @@
 
 namespace app\controllers;
 
-use app\entities\task\Task;
 use app\forms\task\TaskForm;
 use app\forms\task\TaskSearchForm;
+use app\repositories\TaskRepository;
 use app\services\TaskService;
-use Faker\Factory;
 use Yii;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\Request;
+use yii\web\Response;
 
 class TaskController extends Controller
 {
     private $service;
+    private $request;
+    private $tasks;
 
-    public function __construct($id, $module, TaskService $service, $config = [])
+    public function __construct(
+        $id,
+        $module,
+        TaskRepository $tasks,
+        TaskService $service,
+        Request $request,
+        $config = [])
     {
         parent::__construct($id, $module, $config);
+        $this->tasks = $tasks;
         $this->service = $service;
+        $this->request = $request;
     }
 
     public function actionIndex(): string
     {
         $searchModel = new TaskSearchForm();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search($this->request->post());
+        $this->service->cacheDataProvider($dataProvider);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -34,7 +45,7 @@ class TaskController extends Controller
 
     public function actionView($id): string
     {
-        $task = $this->findModel($id);
+        $task = $this->tasks->get($id);
 
         return $this->render('view', [
             'task' => $task,
@@ -45,9 +56,9 @@ class TaskController extends Controller
     {
         $form = new TaskForm();
 
-        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+        if ($form->load($this->request->post()) && $form->validate()) {
             try {
-                $task = $this->service->create(Yii::$app->user->id, $form);
+                $task = $this->service->create($form);
                 return $this->redirect(['view', 'id' => $task->id]);
             } catch (\DomainException $e) {
                 Yii::$app->errorHandler->logException($e);
@@ -62,11 +73,11 @@ class TaskController extends Controller
 
     public function actionUpdate($id)
     {
-        $task = $this->findModel($id);
+        $task = $this->tasks->get($id);
         $form = new TaskForm();
         $form->loadData($task);
 
-        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+        if ($form->load($this->request->post()) && $form->validate()) {
             try {
                 $this->service->edit($task->id, $form);
                 return $this->redirect(['view', 'id' => $task->id]);
@@ -81,34 +92,17 @@ class TaskController extends Controller
         ]);
     }
 
-    public function actionFake(): \yii\web\Response
+    public function actionDelete($id): Response
     {
-        $faker = Factory::create();
-        for ($i = 1; $i <= 50; $i++) {
-            $task = new Task();
-            $task->name = $faker->text(15);
-            $task->description = $faker->text();
-            $task->status_id = $faker->numberBetween(1, 7);
-            $task->creator_id = $faker->numberBetween(1, 2);
-            $task->responsible_id = $faker->numberBetween(1, 2);
-            $task->deadline = date('Y-m-d H:i:s');
-            $task->save();
-        }
+        $task = $this->tasks->get($id);
+        $task->delete();
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Task model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Task the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function findModel($id): Task
+    public function actionFake(): Response
     {
-        if (($model = Task::findOne($id)) !== null) {
-            return $model;
-        }
-        throw new NotFoundHttpException('The requested page does not exist.');
+        $this->service->createFakeData();
+        return $this->redirect(['index']);
     }
+
 }

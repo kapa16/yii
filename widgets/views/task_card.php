@@ -1,8 +1,8 @@
 <?php
 
-/* @var $model Task */
+/* @var $model Tasks */
 
-use app\entities\task\Task;
+use app\entities\task\Tasks;
 use yii\helpers\Html;
 use yii\helpers\StringHelper;
 

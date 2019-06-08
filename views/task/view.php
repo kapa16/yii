@@ -1,9 +1,9 @@
 <?php
 
-use app\entities\task\Task;
+use app\entities\task\Tasks;
 use yii\helpers\Html;
 
-/* @var $task Task */
+/* @var $task Tasks */
 
 $this->title = 'Task';
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
