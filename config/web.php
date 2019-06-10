@@ -1,6 +1,7 @@
 <?php
 
-use yii\redis\Connection;
+use codemix\localeurls\UrlManager;
+use yii\i18n\PhpMessageSource;
 use yii\debug\Module;
 use yii\log\FileTarget;
 use yii\swiftmailer\Mailer;
@@ -22,6 +23,13 @@ $config = [
     'components' => [
         'bootstrap' => [
             'class' => Bootstrap::class
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => PhpMessageSource::class,
+                ]
+            ]
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -60,6 +68,8 @@ $config = [
         ],
         'db' => $db,
         'urlManager' => [
+            'class' => UrlManager::class,
+            'languages' => ['en', 'ru'],
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [

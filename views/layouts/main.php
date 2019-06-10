@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this View */
+
 /* @var $content string */
 
 use app\widgets\Alert;
@@ -12,12 +13,13 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+$app = Yii::$app;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= $app->language ?>">
 <head>
-    <meta charset="<?= Yii::$app->charset ?>">
+    <meta charset="<?= $app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
@@ -31,8 +33,8 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandLabel' => $app->name,
+        'brandUrl' => $app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
@@ -45,16 +47,27 @@ AppAsset::register($this);
             ['label' => 'Users', 'url' => ['/user/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? ['label' => 'Login', 'url' => ['/site/login']] : (
+            $app->user->isGuest ? ['label' => 'Login', 'url' => ['/site/login']] : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Logout (' . $app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
                 . '</li>'
-            )
+            ),
+            ['label' => $app->language,
+             'items' => [
+                 ['label' => 'ru', 'url' => array_merge(
+                     $app->request->get(),
+                     [$app->controller->route, 'language' => 'ru']
+                 )],
+                 ['label' => 'en', 'url' => array_merge(
+                     $app->request->get(),
+                     [$app->controller->route, 'language' => 'en']
+                 )],
+             ]],
         ],
     ]);
     NavBar::end();

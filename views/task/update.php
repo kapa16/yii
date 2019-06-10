@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\entities\task\Tasks */
 
-$this->title = 'Edit task: ' . $model->name;
+$this->title = $model->translateControl('edit') . ': ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Edit';
