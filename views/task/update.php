@@ -1,9 +1,15 @@
 <?php
 
+use app\entities\task\Comments;
+use app\entities\task\Tasks;
+use app\forms\task\TaskForm;
+use app\widgets\CommentsWidget;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\entities\task\Tasks */
+/* @var $model TaskForm */
+/* @var $task Tasks */
+/* @var $comment Comments */
 
 $this->title = $model->translateControl('edit') . ': ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
@@ -16,6 +22,10 @@ $this->params['breadcrumbs'][] = 'Edit';
 
     <?= $this->render('_form', [
         'model' => $model,
+    ]) ?>
+
+    <?= CommentsWidget::widget([
+            'task' => $task
     ]) ?>
 
 </div>

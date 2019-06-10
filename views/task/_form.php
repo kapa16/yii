@@ -15,6 +15,11 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <div class="form-group">
+        <?= Html::submitButton($model->translateControl('save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a($model->translateControl('delete'), ['delete', 'id' => $model['id']], ['class' => 'btn btn-danger']) ?>
+    </div>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <div class="row">
@@ -50,11 +55,6 @@ use yii\widgets\ActiveForm;
         <div class="col-md-offset-1 col-md-5">
             <?= $form->field($model, 'updated_at')->textInput(['disabled' => '']) ?>
         </div>
-    </div>
-
-    <div class="form-group">
-        <?= Html::submitButton($model->translateControl('save'), ['class' => 'btn btn-success']) ?>
-        <?= Html::a($model->translateControl('delete'), ['delete', 'id' => $model['id']], ['class' => 'btn btn-danger']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

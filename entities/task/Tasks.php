@@ -81,27 +81,23 @@ class Tasks extends ActiveRecord
         ];
     }
 
-    /**
-     * @return ActiveQuery
-     */
     public function getCreator(): ActiveQuery
     {
         return $this->hasOne(Users::class, ['id' => 'creator_id']);
     }
 
-    /**
-     * @return ActiveQuery
-     */
     public function getResponsible(): ActiveQuery
     {
         return $this->hasOne(Users::class, ['id' => 'responsible_id']);
     }
 
-    /**
-     * @return ActiveQuery
-     */
     public function getStatus(): ActiveQuery
     {
         return $this->hasOne(Status::class, ['id' => 'status_id']);
+    }
+
+    public function getComments(): ActiveQuery
+    {
+        return $this->hasMany(Comments::class, ['task_id' => 'id']);
     }
 }
