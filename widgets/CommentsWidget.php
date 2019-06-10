@@ -20,7 +20,7 @@ class CommentsWidget extends Widget
         $dataProvider = new ActiveDataProvider([
             'query' => $comments,
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ],
         ]);
 

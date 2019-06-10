@@ -2,6 +2,7 @@
 
 use app\entities\task\Comments;
 use app\entities\task\Tasks;
+use app\forms\task\ImageForm;
 use app\forms\task\TaskForm;
 use app\widgets\CommentsWidget;
 use yii\helpers\Html;
@@ -9,7 +10,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model TaskForm */
 /* @var $task Tasks */
-/* @var $comment Comments */
+/* @var $imageForm ImageForm */
 
 $this->title = $model->translateControl('edit') . ': ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
@@ -24,8 +25,18 @@ $this->params['breadcrumbs'][] = 'Edit';
         'model' => $model,
     ]) ?>
 
-    <?= CommentsWidget::widget([
-            'task' => $task
-    ]) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= CommentsWidget::widget([
+                'task' => $task
+            ]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $this->render('images/_images', [
+                    'task' => $task,
+                    'model' => $imageForm
+            ]) ?>
+        </div>
+    </div>
 
 </div>

@@ -25,7 +25,7 @@ use yii\db\Expression;
  */
 class Comments extends ActiveRecord
 {
-    public function create(string $text, int $taskId)
+    public function create(string $text, int $taskId): void
     {
         $comment = new static();
         $comment->text = $text;

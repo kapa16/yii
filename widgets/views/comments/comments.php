@@ -22,7 +22,7 @@ use yii\widgets\ListView;
 
         ]) ?>
         <?= $form->field($commentForm, 'text')->textarea()->label('') ?>
-        <?= Html::submitButton('Add', ['class' => 'btn btn-primary form-control']) ?>
+        <?= Html::submitButton('Add', ['class' => 'btn btn-primary form-control col-md-2']) ?>
         <?php ActiveForm::end() ?>
     </div>
 

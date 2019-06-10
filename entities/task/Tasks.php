@@ -100,4 +100,9 @@ class Tasks extends ActiveRecord
     {
         return $this->hasMany(Comments::class, ['task_id' => 'id']);
     }
+
+    public function getImages(): ActiveQuery
+    {
+        return $this->hasMany(Images::class, ['task_id' => 'id']);
+    }
 }
