@@ -2,7 +2,9 @@
 
 namespace app\repositories;
 
+use app\entities\task\Status;
 use app\entities\task\Tasks;
+use DateTime;
 
 class TaskRepository
 {
@@ -32,5 +34,14 @@ class TaskRepository
     public function tableName()
     {
         return $this->tasks::tableName();
+    }
+
+    public function findIncompleteByDeadline(DateTime $from, DateTime $to)
+    {
+        return $this->tasks::find()
+            ->where(['not in', 'status_id', [Status::DONE, Status::CANCELLED, Status::CLOSED]])
+            ->andWhere(['>=', 'deadline', $from->format('Y-m-d H:i:s')])
+            ->andWhere(['<=', 'deadline', $to->format('Y-m-d H:i:s')])
+            ->all();
     }
 }

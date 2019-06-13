@@ -11,6 +11,8 @@ class TaskSubscribeService
     private $senderEmail;
     private $mailer;
     private $task;
+    private $subject;
+    private $template;
 
     public function __construct($senderEmail, MailerInterface $mailer)
     {
@@ -18,7 +20,7 @@ class TaskSubscribeService
         $this->mailer = $mailer;
     }
 
-    public function SendNotificationHandler($event): void
+    public function SendCreateHandler($event): void
     {
         /** @var Tasks $eventSender */
         $this->task = $event->sender;
@@ -26,21 +28,30 @@ class TaskSubscribeService
             throw new \UnexpectedValueException ('Invalid event sender type');
         }
 
+        $this->subject = 'New task';
+        $this->template = 'createNotification-html';
         $this->SendNotification($this->task->responsible);
     }
 
     private function SendNotification(Users $user): void
     {
         $this->mailer->compose(
-            ['html' => 'task/createNotification-html'],
+            ['html' => 'task/' . $this->template],
             [
                 'user' => $user,
                 'task' => $this->task,
             ])
             ->setTo($user->email)
             ->setFrom($this->senderEmail)
-            ->setSubject('New task')
+            ->setSubject($this->subject)
             ->send();
     }
 
+    public function SendDeadline($tasks, $daysLeft): void
+    {
+        $this->task = $tasks;
+        $this->subject = 'Deadline';
+        $this->template = 'deadlineNotification-html';
+        $this->SendNotification($this->task->responsible);
+    }
 }

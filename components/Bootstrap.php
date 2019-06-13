@@ -14,10 +14,9 @@ class Bootstrap implements BootstrapInterface
 
     public function bootstrap($app)
     {
+        $container = Yii::$container;
 
-        $container = \Yii::$container;
-
-        $container->setSingleton(MailerInterface::class, function () use ($app) {
+        $container->setSingleton(MailerInterface::class, static function () use ($app) {
             return $app->mailer;
         });
 
@@ -28,14 +27,7 @@ class Bootstrap implements BootstrapInterface
         Event::on(
             Tasks::class,
             Tasks::EVENT_AFTER_INSERT,
-            [$container->get(TaskSubscribeService::class), 'SendNotificationHandler']
+            [$container->get(TaskSubscribeService::class), 'SendCreateHandler']
         );
-
-        $this->setLanguage();
-    }
-
-    private function setLanguage(): void
-    {
-        Yii::$app->language = Yii::$app->session->get('language', 'en');
     }
 }
