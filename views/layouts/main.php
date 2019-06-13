@@ -59,14 +59,8 @@ $app = Yii::$app;
             ),
             ['label' => $app->language,
              'items' => [
-                 ['label' => 'ru', 'url' => array_merge(
-                     $app->request->get(),
-                     [$app->controller->route, 'language' => 'ru']
-                 )],
-                 ['label' => 'en', 'url' => array_merge(
-                     $app->request->get(),
-                     [$app->controller->route, 'language' => 'en']
-                 )],
+                 ['label' => 'ru', 'url' => ['site/language', 'lang' => 'ru']],
+                 ['label' => 'en', 'url' => ['site/language', 'lang' => 'en']],
              ]],
         ],
     ]);

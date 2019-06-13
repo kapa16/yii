@@ -4,6 +4,7 @@ namespace app\components;
 
 use app\entities\task\Tasks;
 use app\services\TaskSubscribeService;
+use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\Event;
 use yii\mail\MailerInterface;
@@ -29,5 +30,12 @@ class Bootstrap implements BootstrapInterface
             Tasks::EVENT_AFTER_INSERT,
             [$container->get(TaskSubscribeService::class), 'SendNotificationHandler']
         );
+
+        $this->setLanguage();
+    }
+
+    private function setLanguage(): void
+    {
+        Yii::$app->language = Yii::$app->session->get('language', 'en');
     }
 }

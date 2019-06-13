@@ -1,6 +1,7 @@
 <?php
 
-use codemix\localeurls\UrlManager;
+//use codemix\localeurls\UrlManager;
+use yii\web\UrlManager;
 use yii\i18n\PhpMessageSource;
 use yii\debug\Module;
 use yii\log\FileTarget;
@@ -14,6 +15,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'en',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'bootstrap'],
     'aliases' => [
@@ -69,10 +71,18 @@ $config = [
         'db' => $db,
         'urlManager' => [
             'class' => UrlManager::class,
-            'languages' => ['en', 'ru'],
+//            'languages' => ['en', 'ru'],
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '/' => 'site/index',
+                '<action:(about|contact|login)>' => 'site/<action>',
+                '<controller>/page/<page:\d+>/per-page/<per-page:\d+>' => '<controller>/index',
+                '<controller>' => '<controller>/index',
+                '<controller>/<id:\d+>' => '<controller>/view',
+                '<controller>/<id:\d+>/<action>' => '<controller>/<action>',
+
+
             ],
         ],
     ],
