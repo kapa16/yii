@@ -4,8 +4,14 @@ namespace app\forms\task;
 
 use app\entities\task\Tasks;
 use app\helpers\TaskHelper;
+use app\behaviors\TranslateBehavior;
 use yii\base\Model;
 
+/**
+ * Class TaskForm
+ * @package app\forms\task
+ * @mixin TranslateBehavior
+ */
 class TaskForm extends Model
 {
     public $id;
@@ -18,6 +24,12 @@ class TaskForm extends Model
     public $created_at;
     public $updated_at;
 
+    public function behaviors(): array
+    {
+        return [
+            TranslateBehavior::class
+        ];
+    }
 
     public function loadData(Tasks $model): void
     {
@@ -45,10 +57,11 @@ class TaskForm extends Model
 
     public function attributeLabels(): array
     {
-        return [
-            'id' => 'Number',
-            'name' => 'Task name',
-        ];
+        $labels = [];
+        foreach ($this->attributes as $key => $attribute) {
+            $labels[$key] = $this->translateTask($key);
+        }
+        return $labels;
     }
 
     public function statusList(): array

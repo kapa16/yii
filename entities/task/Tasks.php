@@ -2,6 +2,7 @@
 
 namespace app\entities\task;
 
+use app\behaviors\TranslateBehavior;
 use app\entities\Users;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -25,9 +26,12 @@ use yii\db\Expression;
  * @property Users $creator
  * @property Users $responsible
  * @property Status $status
+ *
+ * @mixin TranslateBehavior
  */
 class Tasks extends ActiveRecord
 {
+
     public static function create(
         $name,
         $description,
@@ -71,30 +75,34 @@ class Tasks extends ActiveRecord
                 'createdByAttribute' => 'creator_id',
                 'updatedByAttribute' => null,
             ],
+            [
+                'class' => TranslateBehavior::class
+            ],
         ];
     }
 
-    /**
-     * @return ActiveQuery
-     */
     public function getCreator(): ActiveQuery
     {
         return $this->hasOne(Users::class, ['id' => 'creator_id']);
     }
 
-    /**
-     * @return ActiveQuery
-     */
     public function getResponsible(): ActiveQuery
     {
         return $this->hasOne(Users::class, ['id' => 'responsible_id']);
     }
 
-    /**
-     * @return ActiveQuery
-     */
     public function getStatus(): ActiveQuery
     {
         return $this->hasOne(Status::class, ['id' => 'status_id']);
+    }
+
+    public function getComments(): ActiveQuery
+    {
+        return $this->hasMany(Comments::class, ['task_id' => 'id']);
+    }
+
+    public function getImages(): ActiveQuery
+    {
+        return $this->hasMany(Images::class, ['task_id' => 'id']);
     }
 }
