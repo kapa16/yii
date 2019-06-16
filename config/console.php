@@ -1,12 +1,18 @@
 <?php
 
+use yii\log\FileTarget;
+use yii\caching\FileCache;
+use app\components\Bootstrap;
+use yii\swiftmailer\Mailer;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$urlManager = require __DIR__ . '/url_manager.php';
 
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'bootstrap'],
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -14,18 +20,29 @@ $config = [
         '@tests' => '@app/tests',
     ],
     'components' => [
+        'bootstrap' => [
+            'class' => Bootstrap::class
+        ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => FileCache::class,
         ],
         'log' => [
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class' => FileTarget::class,
                     'levels' => ['error', 'warning'],
                 ],
             ],
         ],
-        'db' => $db,
+        'mailer' => [
+            'class' => Mailer::class,
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => true,
+        ],
+       'db' => $db,
+        'urlManager' => $urlManager,
     ],
     'params' => $params,
     /*

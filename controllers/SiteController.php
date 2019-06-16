@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\Cookie;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -134,5 +135,13 @@ class SiteController extends Controller
     public function actionAbout(): string
     {
         return $this->render('about');
+    }
+
+    public function actionLanguage($lang): Response
+    {
+        if (Yii::$app->language !== $lang) {
+            Yii::$app->session->set('language', $lang);
+        }
+        return $this->redirect(Yii::$app->request->referrer);
     }
 }

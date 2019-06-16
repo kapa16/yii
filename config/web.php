@@ -1,21 +1,23 @@
 <?php
 
-use codemix\localeurls\UrlManager;
 use yii\i18n\PhpMessageSource;
 use yii\debug\Module;
 use yii\log\FileTarget;
 use yii\swiftmailer\Mailer;
 use app\models\UserIdentity;
 use app\components\Bootstrap;
+use app\components\BootstrapWeb;
 use yii\redis\Cache;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$urlManager = require __DIR__ . '/url_manager.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'en',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'bootstrap'],
+    'bootstrap' => ['log', 'bootstrap', 'bootstrapWeb'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -23,6 +25,9 @@ $config = [
     'components' => [
         'bootstrap' => [
             'class' => Bootstrap::class
+        ],
+        'bootstrapWeb' => [
+            'class' => BootstrapWeb::class
         ],
         'i18n' => [
             'translations' => [
@@ -67,14 +72,7 @@ $config = [
             ],
         ],
         'db' => $db,
-        'urlManager' => [
-            'class' => UrlManager::class,
-            'languages' => ['en', 'ru'],
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
+        'urlManager' => $urlManager,
     ],
     'params' => $params,
 ];
