@@ -1,10 +1,11 @@
 <?php
 
+use app\assets\TaskAsset;
 use app\entities\task\Images;
 use yii\helpers\Html;
 
 /** @var Images $model */
-
+TaskAsset::register($this)
 ?>
 
 <div class="col-md-3 image__preview center-block">

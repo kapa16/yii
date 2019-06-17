@@ -25,7 +25,6 @@ $app = Yii::$app;
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <?php $this->beginBody() ?>
