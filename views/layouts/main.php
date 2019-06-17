@@ -61,6 +61,7 @@ $app = Yii::$app;
                  ['label' => 'ru', 'url' => ['site/language', 'lang' => 'ru']],
                  ['label' => 'en', 'url' => ['site/language', 'lang' => 'en']],
              ]],
+            ['label' => 'Access', 'url' => ['/admin/assignment']]
         ],
     ]);
     NavBar::end();
