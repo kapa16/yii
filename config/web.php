@@ -1,5 +1,6 @@
 <?php
 
+use mdm\admin\components\AccessControl;
 use yii\rbac\DbManager;
 use yii\i18n\PhpMessageSource;
 use yii\debug\Module;
@@ -93,6 +94,15 @@ $config = [
                 'user' => null,
             ],
         ]
+    ],
+    'as access' => [
+        'class' => AccessControl::class,
+        'allowActions' => [
+            'site/index',
+            'site/login',
+            'site/about',
+            'site/contact',
+        ],
     ],
 
     'params' => $params,

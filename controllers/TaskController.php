@@ -11,8 +11,8 @@ use app\forms\task\TaskSearchForm;
 use app\repositories\TaskRepository;
 use app\services\TaskService;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\web\Request;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -43,6 +43,7 @@ class TaskController extends Controller
         $this->images = $images;
     }
 
+
     public function actionIndex(): string
     {
         $searchModel = new TaskSearchForm();
@@ -53,6 +54,43 @@ class TaskController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => [
+                    'index',
+                    'view',
+                    'create',
+                    'delete',
+                ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => ['TaskCreate'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['TaskCreate'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['TaskCreate'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['delete'],
+                        'roles' => ['TaskDelete'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     public function actionView($id): string
@@ -86,6 +124,11 @@ class TaskController extends Controller
     public function actionUpdate($id)
     {
         $task = $this->tasks->get($id);
+        if (!Yii::$app->user->can('TaskUpdate', ['task' => $task])) {
+            Yii::$app->session->setFlash('You are not allowed to update this task');
+            return $this->goBack();
+        }
+
         $form = new TaskForm();
         $form->loadData($task);
 
@@ -123,7 +166,7 @@ class TaskController extends Controller
         }
         return $this->redirect(['update', 'id' => $task->id]);
     }
-    
+
     public function actionUpload($id): Response
     {
         $task = $this->tasks->get($id);

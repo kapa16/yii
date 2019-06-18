@@ -75,4 +75,10 @@ class Users extends ActiveRecord
         ];
     }
 
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+
 }

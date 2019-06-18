@@ -18,12 +18,6 @@ class UserIdentity extends BaseObject implements IdentityInterface
     public $authKey;
     public $accessToken;
 
-
-    public static function find()
-    {
-        return Users::find();
-    }
-
     /**
      * {@inheritdoc}
      */
