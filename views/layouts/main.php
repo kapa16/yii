@@ -25,7 +25,6 @@ $app = Yii::$app;
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -62,6 +61,7 @@ $app = Yii::$app;
                  ['label' => 'ru', 'url' => ['site/language', 'lang' => 'ru']],
                  ['label' => 'en', 'url' => ['site/language', 'lang' => 'en']],
              ]],
+            ['label' => 'Access', 'url' => ['/admin/assignment']]
         ],
     ]);
     NavBar::end();

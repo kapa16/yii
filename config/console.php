@@ -1,5 +1,6 @@
 <?php
 
+use yii\rbac\DbManager;
 use yii\log\FileTarget;
 use yii\caching\FileCache;
 use app\components\Bootstrap;
@@ -41,7 +42,10 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
-       'db' => $db,
+        'authManager' => [
+            'class' => DbManager::class,
+        ],
+        'db' => $db,
         'urlManager' => $urlManager,
     ],
     'params' => $params,

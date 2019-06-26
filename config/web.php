@@ -1,5 +1,7 @@
 <?php
 
+use mdm\admin\components\AccessControl;
+use yii\rbac\DbManager;
 use yii\i18n\PhpMessageSource;
 use yii\debug\Module;
 use yii\log\FileTarget;
@@ -48,6 +50,9 @@ $config = [
                 'database' => 0,
             ],
         ],
+        'authManager' => [
+            'class' => DbManager::class,
+        ],
         'user' => [
             'identityClass' => UserIdentity::class,
             'enableAutoLogin' => true,
@@ -74,6 +79,32 @@ $config = [
         'db' => $db,
         'urlManager' => $urlManager,
     ],
+    'modules' => [
+        'admin' => [
+            'class' => 'mdm\admin\Module',
+            'layout' => 'left-menu',
+            'controllerMap' => [
+                'assignment' => [
+                    'class' => 'mdm\admin\controllers\AssignmentController',
+                    'userClassName' => 'app\entities\Users',
+                    'usernameField' => 'login',
+                ]
+            ],
+            'menus' => [
+                'user' => null,
+            ],
+        ]
+    ],
+    'as access' => [
+        'class' => AccessControl::class,
+        'allowActions' => [
+            'site/index',
+            'site/login',
+            'site/about',
+            'site/contact',
+        ],
+    ],
+
     'params' => $params,
 ];
 

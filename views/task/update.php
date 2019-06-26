@@ -16,6 +16,7 @@ $this->title = $model->translateControl('edit') . ': ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Edit';
+
 ?>
 <div class="task-update">
 
